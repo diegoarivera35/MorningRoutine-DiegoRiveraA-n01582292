@@ -161,6 +161,9 @@ window.onload = function () {
 
     // Function to convert milliseconds to hours, minutes and seconds
     function msToTime(duration) {
+      // Clear the array to avoid accumulation
+      arrayTime = [];
+      
       seconds = Math.floor((duration / 1000) % 60);
       minutes = Math.floor((duration / (1000 * 60)) % 60);
       hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
@@ -208,17 +211,25 @@ window.onload = function () {
 
       cargarMinutos(segundos);
 
-      // Checking if the timer has reached zero so ir displays Times Up and it rings to alert the user
-      if (segundos == -1 && minutos == 0 && horas == 0) {
+      // Checking if the timer has reached zero so it displays Times Up and it rings to alert the user
+      if (segundos <= -1 && minutos == 0 && horas == 0) {
         clearInterval(clock);
-        document.getElementById("temporizador").innerHTML =
-          '<div id="gif"><iframe src="https://giphy.com/embed/O9jbdWwG1QiTBkU8P1" width="120" height="120" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><h2>Time is up!</h2></div>';
-        function sound(audioName) {
-          var audio = new Audio(audioName);
-          audio.loop = false;
-          audio.play();
-        }
-        sound("mechanical_clock_ring.ogg");
+        // Set display to 00:00:00 before showing the time up message
+        document.getElementById("horas").innerHTML = "00";
+        document.getElementById("minutos").innerHTML = "00";
+        document.getElementById("segundos").innerHTML = "00";
+        
+        setTimeout(() => {
+          document.getElementById("temporizador").innerHTML =
+            '<div id="gif"><iframe src="https://giphy.com/embed/O9jbdWwG1QiTBkU8P1" width="120" height="120" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><h2>Time is up!</h2></div>';
+          function sound(audioName) {
+            var audio = new Audio(audioName);
+            audio.loop = false;
+            audio.play();
+          }
+          sound("mechanical_clock_ring.ogg");
+        }, 100);
+        return; // Exit the function to prevent further execution
       }
     }
 
@@ -231,7 +242,7 @@ window.onload = function () {
         setTimeout(() => {
           minutos--;
         }, 500);
-      } else if (segundos == -1 && minutos == 0) {
+      } else if (segundos == -1 && minutos == 0 && horas > 0) {
         setTimeout(() => {
           minutos = 59;
         }, 500);
@@ -255,10 +266,6 @@ window.onload = function () {
       if (segundos == -1 && minutos == 0 && horas !== 0) {
         setTimeout(() => {
           horas--;
-        }, 500);
-      } else if (segundos == -1 && minutos == 0 && horas == 0) {
-        setTimeout(() => {
-          horas = 2;
         }, 500);
       }
 
