@@ -1,0 +1,4 @@
+.DS_Store
+favicon/.DS_Store
+node_modules/
+*.log

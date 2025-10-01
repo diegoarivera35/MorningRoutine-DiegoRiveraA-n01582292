@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="favicon/favicon.ico" type="image/png">
+    <link rel="shortcut icon" href="favicon/favicon.ico" type="image/png">
+    <title>
+      Pet Project - Morning Routine<i class="fas fa-route-interstate "></i>
+    </title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Main content of the page -->
+    <div id="description">
+      <!-- Heading and description for the Pet Project -->
+      <h1>Morning Routine Timer</h1>
+      <p>
+        This tool is designed to help you calculate the time you'll spend
+        completing activities before leaving your home in the morning. Simply
+        add the activities you plan to do and click 'start.' As the timer begins
+        counting down, you'll know how much time you have to get everything
+        done. Enjoy using it!
+      </p>
+    </div>
+    <!-- Form for selecting morning routine activities -->
+    <form class="bg-dark-subtle p-3" name="myform">
+      <div class="activities">
+        <h3>Select your morning routine activities:</h3>
+        <div id="nothingSelected"></div>
+        <div class="row">
+          <!-- Two columns of checkboxes for different activities -->
+          <div class="col">
+            <input
+              type="checkbox"
+              class="form-check-input"
+              id="meditate"
+              name="meditate"
+              value="0"
+            />
+            <label for="meditate" class="tooltip" aria-details="hola"> Meditate
+              <span class="tooltiptext">5 Minutes</span>
+            </label><br />
+            
+            <input
+              type="checkbox"
+              class="form-check-input"
+              id="hydrate"
+              name="hydrate"
+              value="0"
+            />
+            <label for="hydrate" class="tooltip"> Hydrate
+              <span class="tooltiptext">2 Minutes</span>
+            </label><br />
+            <input
+              type="checkbox"
+              class="form-check-input"
+              id="stretch"
+              name="stretch"
+              value="stretch"
+            />
+            <label for="stretch" class="tooltip"> Stretch
+              <span class="tooltiptext">5 Minutes</span>
+            </label><br />
+            <input
+              type="checkbox"
+              class="form-check-input"
+              id="exercise"
+              name="exercise"
+              value="exercise"
+            />
+            <label for="exercise" class="tooltip"> Exercise
+              <span class="tooltiptext">30 Minutes</span>
+            </label><br />
+            <input
+              type="checkbox"
+              class="form-check-input"
+              id="brush"
+              name="brush"
+              value="brush"
+            />
+            <label for="brush" class="tooltip"> Brush teeth
+              <span class="tooltiptext">3 Minutes</span>
+            </label><br />
+            <input
+              type="checkbox"
+              class="form-check-input"
+              id="skin"
+              name="skin"
+              value="skin"
+            />
+            <label for="skin" class="tooltip"> Skin daily routine
+              <span class="tooltiptext">5 Minutes</span>
+            </label><br />
+            <input
+              type="checkbox"
+              class="form-check-input"
+              id="plan"
+              name="plan"
+              value="plan"
+            />
+            <label for="plan" class="tooltip"> Plan your day
+              <span class="tooltiptext">10 Minutes</span>
+            </label><br />
+            <input
+              type="checkbox"
+              class="form-check-input"
+              id="read"
+              name="read"
+              value="read"
+            />
+            <label for="read" class="tooltip"> Read
+              <span class="tooltiptext">20 Minutes</span>
+            </label><br />
+          </div>
+          <div class="col">
+            <input
+              type="checkbox"
+              class="form-check-input"
+              id="dressed"
+              name="dressed"
+              value="dressed"
+            />
+            <label for="dressed" class="tooltip"> Get dressed
+              <span class="tooltiptext">5 Minutes</span>
+            </label><br />
+            <input
+              type="checkbox"
+              class="form-check-input"
+              id="emails"
+              name="emails"
+              value="emails"
+            />
+            <label for="emails" class="tooltip"> Check emails
+              <span class="tooltiptext">10 Minutes</span>
+            </label><br />
+            <input
+              type="checkbox"
+              class="form-check-input"
+              id="media"
+              name="media"
+              value="media"
+            />
+            <label for="media" class="tooltip"> Check social media
+              <span class="tooltiptext">15 Minutes</span>
+            </label><br />
+            <input
+              type="checkbox"
+              class="form-check-input"
+              id="bed"
+              name="bed"
+              value="bed"
+            />
+            <label for="bed" class="tooltip"> Make your bed
+              <span class="tooltiptext">5 Minutes</span>
+            </label><br />
+            <input
+              type="checkbox"
+              class="form-check-input"
+              id="shower"
+              name="shower"
+              value="shower"
+            />
+            <label for="shower" class="tooltip"> Take a shower
+              <span class="tooltiptext">10 Minutes</span>
+            </label><br />
+            <input
+              type="checkbox"
+              class="form-check-input"
+              id="cook"
+              name="cook"
+              value="cook"
+            />
+            <label for="cook" class="tooltip"> Cook breakfast
+              <span class="tooltiptext">15 Minutes</span>
+            </label><br />
+            <input
+              type="checkbox"
+              class="form-check-input"
+              id="eat"
+              name="eat"
+              value="eat"
+            />
+            <label for="eat" class="tooltip"> Eat breakfast
+              <span class="tooltiptext">10 Minutes</span>
+            </label><br />
+            <input
+              type="checkbox"
+              class="form-check-input"
+              id="wash"
+              name="wash"
+              value="wash"
+            />
+            <label for="wash" class="tooltip"> Wash dishes
+              <span class="tooltiptext">10 Minutes</span>
+            </label><br />
+          </div>
+        </div>
+
+        <!-- Buttons to start and reset the timer -->
+        <div id="botones">
+          <button
+            type="submit"
+            id="start"
+            class="btn btn-primary"
+            value="Submit"
+          >
+            Start
+          </button>
+          <button class="btn btn-danger" id="reset">Reset</button>
+        </div>
+      </div>
+    </form>
+
+    <!-- Display for the countdown timer -->
+    <div id="temporizador">
+      <div class="conteo">
+        <div class="horas" id="horas">00</div>
+        <p>:</p>
+      </div>
+      <div class="conteo">
+        <div class="minutos" id="minutos">00</div>
+        <p>:</p>
+      </div>
+      <div class="conteo">
+        <div class="segundos" id="segundos">00</div>
+      </div>
+    </div>
+
+    <!-- Footer with author information -->
+    <footer>
+      <p>
+        designed and programmed by Diego Alexander Rivera Acosta, Humber
+        College, Toronto, Canada. 2023
+      </p>
+    </footer>
+
+    <!-- Link to JavaScript file -->
+    <script src="script.js"></script>
+  </body>
+</html>
