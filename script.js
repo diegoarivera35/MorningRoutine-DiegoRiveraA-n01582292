@@ -193,26 +193,8 @@ window.onload = function () {
 
     // Function to load and display seconds
     function cargarSegundo() {
-      let txtSegundos;
-
-      // Handling seconds and minutes rollover
-      if (segundos < 0 && minutos > 0) {
-        segundos = 59;
-      }
-
-      // Formatting seconds for display
-      if (segundos < 10) {
-        txtSegundos = "0" + segundos;
-      } else {
-        txtSegundos = segundos;
-      }
-      document.getElementById("segundos").innerHTML = txtSegundos;
-      segundos--;
-
-      cargarMinutos(segundos);
-
-      // Checking if the timer has reached zero so it displays Times Up and it rings to alert the user
-      if (segundos <= -1 && minutos == 0 && horas == 0) {
+      // Check if the timer has reached zero FIRST
+      if (horas == 0 && minutos == 0 && segundos == 0) {
         clearInterval(clock);
         // Set display to 00:00:00 before showing the time up message
         document.getElementById("horas").innerHTML = "00";
@@ -229,53 +211,35 @@ window.onload = function () {
           }
           sound("mechanical_clock_ring.ogg");
         }, 100);
-        return; // Exit the function to prevent further execution
+        return;
       }
-    }
 
-    // Function to load and display minutes
-    function cargarMinutos(segundos) {
-      let txtMinutos;
-
-      // Handling minutes rollover
-      if (segundos == -1 && minutos !== 0) {
-        setTimeout(() => {
+      // Decrement the time
+      if (segundos > 0) {
+        segundos--;
+      } else {
+        // Seconds is 0, need to rollover
+        if (minutos > 0) {
           minutos--;
-        }, 500);
-      } else if (segundos == -1 && minutos == 0 && horas > 0) {
-        setTimeout(() => {
-          minutos = 59;
-        }, 500);
+          segundos = 59;
+        } else {
+          // Minutes is also 0, need to rollover hours
+          if (horas > 0) {
+            horas--;
+            minutos = 59;
+            segundos = 59;
+          }
+        }
       }
 
-      // Formatting minutes for display
-      if (minutos < 10) {
-        txtMinutos = "0" + minutos;
-      } else {
-        txtMinutos = minutos;
-      }
-      document.getElementById("minutos").innerHTML = txtMinutos;
-      cargarHoras(segundos, minutos);
-    }
+      // Display the current time
+      let txtHoras = horas < 10 ? "0" + horas : horas;
+      let txtMinutos = minutos < 10 ? "0" + minutos : minutos;
+      let txtSegundos = segundos < 10 ? "0" + segundos : segundos;
 
-    // Function to load and display hours
-    function cargarHoras(segundos, minutos) {
-      let txtHoras;
-
-      // Handling hours rollover
-      if (segundos == -1 && minutos == 0 && horas !== 0) {
-        setTimeout(() => {
-          horas--;
-        }, 500);
-      }
-
-      // Formatting hours for display
-      if (horas < 10) {
-        txtHoras = "0" + horas;
-      } else {
-        txtHoras = horas;
-      }
       document.getElementById("horas").innerHTML = txtHoras;
+      document.getElementById("minutos").innerHTML = txtMinutos;
+      document.getElementById("segundos").innerHTML = txtSegundos;
     }
 
     // Execute the countdown timer every second
