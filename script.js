@@ -75,13 +75,13 @@ window.onload = function () {
     var timeEat = 0;
     var timeWash = 0;
 
-    // If to validate which inputs where "checked" by the user so it assigns time to them
     if (document.getElementById("meditate").checked) {
-      timeMeditate = 300000; // 5 minutes in milliseconds
+      timeMeditate = 600000; // 10 minutes in milliseconds
+      document.getElementById("meditate").disabled = true;
     }
 
     if (document.getElementById("hydrate").checked) {
-      timeHydrate = 120000; // 2 minutes in milliseconds
+      timeHydrate = 300000; // 5 minutes in milliseconds
     }
 
     if (document.getElementById("stretch").checked) {
@@ -133,14 +133,14 @@ window.onload = function () {
     }
 
     if (document.getElementById("eat").checked) {
-      timeEat = 600000; // 10 minutes in milliseconds
+      timeEat = 1200000; // 20 minutes in milliseconds
     }
 
     if (document.getElementById("wash").checked) {
       timeWash = 600000; // 10 minutes in milliseconds
     }
 
-    // Variable to get the sum of all of the activities selected
+    // SUM OF ALL CHECKED INPUTS TIMES
     var totalTime =
       timeMeditate +
       timeHydrate +
@@ -159,21 +159,19 @@ window.onload = function () {
       timeEat +
       timeWash;
 
-    // Function to convert milliseconds to hours, minutes and seconds
-    function msToTime(duration) {
-      // Clear the array to avoid accumulation
-      arrayTime = [];
-      
-      seconds = Math.floor((duration / 1000) % 60);
-      minutes = Math.floor((duration / (1000 * 60)) % 60);
-      hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
-      hours = hours < 10 ? "0" + hours : hours;
-      minutes = minutes < 10 ? "0" + minutes : minutes;
-      seconds = seconds < 10 ? "0" + seconds : seconds;
+    // Function to translate from milliseconds to hh:mm:ss
+    function msToTime(millis) {
+      var hours = Math.floor(millis / (1000 * 60 * 60));
+      var minutes = Math.floor((millis % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((millis % (1000 * 60)) / 1000);
 
-      arrayTime.push(parseInt(hours, 10));
-      arrayTime.push(parseInt(minutes, 10));
-      arrayTime.push(parseInt(seconds, 10));
+      // Store the values into the array to use the result
+      arrayTime.push(hours, minutes, seconds);
+
+      // Display the hours minutes and seconds with two digits in each number
+      document.getElementById("horas").textContent = (hours < 10 ? "0" : "") + hours;
+      document.getElementById("minutos").textContent = (minutes < 10 ? "0" : "") + minutes;
+      document.getElementById("segundos").textContent = (seconds < 10 ? "0" : "") + seconds;
 
       return arrayTime;
     }
@@ -184,23 +182,21 @@ window.onload = function () {
     console.log("This is the total time: " + result);
     console.log(arrayTime);
 
-    // Section that handles the countdown timer
-    let horas = arrayTime[0];
-    let minutos = arrayTime[1];
-    let segundos = arrayTime[2];
+    // Section that handles the countdown timer (robust total-seconds version)
+    let totalSeconds = Math.floor(totalTime / 1000);
 
-    cargarSegundo();
+    // Paint initial time before ticking
+    updateDisplay(totalSeconds);
 
-    // Function to load and display seconds
-    function cargarSegundo() {
-      // Check if the timer has reached zero FIRST
-      if (horas == 0 && minutos == 0 && segundos == 0) {
+    // tick each second
+    const clock = setInterval(() => {
+      if (totalSeconds <= 0) {
         clearInterval(clock);
-        // Set display to 00:00:00 before showing the time up message
-        document.getElementById("horas").innerHTML = "00";
-        document.getElementById("minutos").innerHTML = "00";
-        document.getElementById("segundos").innerHTML = "00";
-        
+        // lock to 00:00:00
+        document.getElementById("horas").textContent = "00";
+        document.getElementById("minutos").textContent = "00";
+        document.getElementById("segundos").textContent = "00";
+        // slight delay to ensure DOM paints
         setTimeout(() => {
           document.getElementById("temporizador").innerHTML =
             '<div id="gif"><iframe src="https://giphy.com/embed/O9jbdWwG1QiTBkU8P1" width="120" height="120" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><h2>Time is up!</h2></div>';
@@ -213,37 +209,18 @@ window.onload = function () {
         }, 100);
         return;
       }
+      totalSeconds -= 1;
+      updateDisplay(totalSeconds);
+    }, 1000);
 
-      // Decrement the time
-      if (segundos > 0) {
-        segundos--;
-      } else {
-        // Seconds is 0, need to rollover
-        if (minutos > 0) {
-          minutos--;
-          segundos = 59;
-        } else {
-          // Minutes is also 0, need to rollover hours
-          if (horas > 0) {
-            horas--;
-            minutos = 59;
-            segundos = 59;
-          }
-        }
-      }
-
-      // Display the current time
-      let txtHoras = horas < 10 ? "0" + horas : horas;
-      let txtMinutos = minutos < 10 ? "0" + minutos : minutos;
-      let txtSegundos = segundos < 10 ? "0" + segundos : segundos;
-
-      document.getElementById("horas").innerHTML = txtHoras;
-      document.getElementById("minutos").innerHTML = txtMinutos;
-      document.getElementById("segundos").innerHTML = txtSegundos;
+    function updateDisplay(ts) {
+      const h = Math.floor(ts / 3600);
+      const m = Math.floor((ts % 3600) / 60);
+      const s = ts % 60;
+      document.getElementById("horas").textContent = String(h).padStart(2, "0");
+      document.getElementById("minutos").textContent = String(m).padStart(2, "0");
+      document.getElementById("segundos").textContent = String(s).padStart(2, "0");
     }
-
-    // Execute the countdown timer every second
-    var clock = setInterval(cargarSegundo, 1000);
 
     // Hide start button and display reset button after starting the timer
     document.getElementById("start").style.display = "none";
